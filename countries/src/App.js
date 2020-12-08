@@ -17,19 +17,47 @@ const Search = ({ search, setSearch }) => {
   );
 };
 
-const Country = ({ country, show }) => {
+const Weather = ({ capital, weather }) => {
+  console.log(weather);
+
+  return (
+    <>
+      <h2>Weather in {capital}</h2>
+      <p>temperature: {weather.temperature}</p>
+      <img src={weather.weather_icons} alt='' />
+      <p>
+        wind {weather.wind_speed} mph direction {weather.wind_dir}
+      </p>
+    </>
+  );
+};
+
+const Country = ({ country }) => {
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://api.weatherstack.com/current?access_key=${process.env.REACT_APP_API_KEY}&query=${country.capital}`
+      )
+      .then((res) => setWeather(res.data));
+  }, []);
+
   return (
     <>
       <h1>{country.name}</h1>
       <p>{country.capital}</p>
       <p>population {country.population}</p>
-      <h2>languages</h2>
+      <h2>Spoken languages</h2>
       <ul>
         {country.languages.map((lang) => (
           <li key={lang.name}>{lang.name}</li>
         ))}
       </ul>
       <img src={country.flag} alt='' style={{ width: '200px' }} />
+      {weather && (
+        <Weather capital={weather.location.name} weather={weather.current} />
+      )}
     </>
   );
 };
