@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 const Filter = ({ searchName, setSearchName }) => {
   return (
-    <React.Fragment>
+    <>
       <label htmlFor={'search'}>filter shown with </label>
       <input
         type='text'
@@ -11,7 +12,7 @@ const Filter = ({ searchName, setSearchName }) => {
         value={searchName}
         onChange={(e) => setSearchName(e.target.value)}
       />
-    </React.Fragment>
+    </>
   );
 };
 
@@ -23,7 +24,7 @@ const PersonForm = ({
   onSubmit,
 }) => {
   return (
-    <React.Fragment>
+    <>
       <form onSubmit={onSubmit}>
         <label htmlFor='name'>Name: </label>
         <input
@@ -46,7 +47,7 @@ const PersonForm = ({
           add
         </button>
       </form>
-    </React.Fragment>
+    </>
   );
 };
 
@@ -67,16 +68,16 @@ const Persons = ({ persons, searchName }) => {
 };
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' },
-  ]);
-
+  const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [searchName, setSearchName] = useState('');
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/persons').then((res) => {
+      setPersons(res.data);
+    });
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();
