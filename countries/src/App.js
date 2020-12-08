@@ -35,6 +35,14 @@ const Country = ({ country, show }) => {
 };
 
 const Countries = ({ countries }) => {
+  const [show, setShow] = useState(new Array(countries.length).fill(false));
+
+  const toggleShow = (i) => () => {
+    let newShow = [...show];
+    newShow[i] = !newShow[i];
+    setShow(newShow);
+  };
+
   if (countries.length === 1) {
     return <Country country={countries[0]} />;
   } else {
@@ -42,7 +50,9 @@ const Countries = ({ countries }) => {
       <ul>
         {countries.map((country, i) => (
           <li key={country.name}>
-            {country.name} <button>show</button>
+            {country.name}{' '}
+            <button onClick={toggleShow(i)}>{show[i] ? 'hide' : 'show'}</button>
+            {show[i] && <Country country={country} />}
           </li>
         ))}
       </ul>
