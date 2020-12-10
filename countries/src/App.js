@@ -17,16 +17,15 @@ const Search = ({ search, setSearch }) => {
   );
 };
 
-const Weather = ({ capital, weather }) => {
-  console.log(weather);
-
+const Weather = ({ weather }) => {
   return (
     <>
-      <h2>Weather in {capital}</h2>
-      <p>temperature: {weather.temperature}</p>
-      <img src={weather.weather_icons} alt='' />
+      <h2>Weather in {weather.location.name}</h2>
+      <p>temperature: {weather.current.temperature}</p>
+      <img src={weather.current.weather_icons} alt='' />
       <p>
-        wind {weather.wind_speed} mph direction {weather.wind_dir}
+        wind {weather.current.wind_speed} mph direction{' '}
+        {weather.current.wind_dir}
       </p>
     </>
   );
@@ -55,9 +54,7 @@ const Country = ({ country }) => {
         ))}
       </ul>
       <img src={country.flag} alt='' style={{ width: '200px' }} />
-      {weather && (
-        <Weather capital={weather.location.name} weather={weather.current} />
-      )}
+      {weather && <Weather weather={weather} />}
     </>
   );
 };
